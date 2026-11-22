@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YBC Gacha | Collect. Open. Discover.</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        .account-area{display:flex;align-items:center;gap:10px;margin-left:12px}
+        .account-user{display:flex;flex-direction:column;gap:3px;min-width:90px}
+        .account-user-label{font-size:9px;font-weight:800;letter-spacing:1.2px;color:#8793a8}
+        .account-username{font-size:12px;font-weight:800;color:#fff;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+        .account-button{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;cursor:pointer}
+        .logout-button{border:1px solid #343b4b;background:#151a25;color:#aeb9cc;border-radius:7px;padding:9px 11px;font:700 10px Inter,sans-serif;transition:.2s}
+        .logout-button:hover{border-color:#e35b68;color:#fff;background:#29171d}
+        .account-auth-links{display:flex;align-items:center;gap:8px}
+        .account-auth-links a{font-size:11px;font-weight:800;text-decoration:none;padding:9px 12px;border-radius:7px}
+        .account-register{background:#2678f5;color:#fff}
+        .account-login{border:1px solid #343b4b;color:#dce4f2}
+        @media(max-width:600px){.account-area{gap:6px;margin-left:5px}.account-user{min-width:0}.account-username{max-width:90px}.logout-button{padding:8px}.account-auth-links a{padding:8px;font-size:10px}}
+    </style>
+</head>
+
+<body>
+
+<header class="navbar">
+    <a href="index.html" class="logo">YBC<span>GACHA</span></a>
+
+    <nav class="nav-links">
+        <a href="index.html" class="active">Home</a>
+        <a href="shop.html">Shop</a>
+        <a href="collections.html">Collection</a>
+    </nav>
+
+    <div class="nav-right">
+        <div class="points-display">
+            <span class="coin-icon">◆</span>
+            <span id="navPoints">0</span>
+            <span class="points-label">POINTS</span>
+        </div>
+        <div class="account-area" id="accountArea">
+            <a href="login.html" class="account-button">Account</a>
+        </div>
+    </div>
+</header>
+
+<main class="dashboard">
+
+    <section class="dashboard-top">
+        <div class="dashboard-intro">
+            <span class="eyebrow">YOUR COLLECTION STARTS HERE</span>
+            <h1>Welcome to <span>YBC Gacha.</span></h1>
+            <p>Open packs, discover incredible cards and build your collection.</p>
+        </div>
+
+        <div class="quick-balance">
+            <span class="balance-label">YOUR BALANCE</span>
+            <div class="balance-number">
+                <span>◆</span>
+                <strong id="mainPoints">0</strong>
+                <small>PTS</small>
+            </div>
+            <a href="shop.html">Visit the shop →</a>
+        </div>
+    </section>
+
+    <section class="featured-pack-panel">
+        <div class="featured-pack-info">
+            <span class="eyebrow">PACKS AVAILABLE</span>
+            <h2>Ready for your next pull?</h2>
+            <p>Choose a pack, test your luck and discover something new.</p>
+            <div class="featured-pack-stats">
+                <div><strong>3</strong><span>PACK TYPES</span></div>
+                <div><strong>8</strong><span>RARITIES</span></div>
+                <div><strong>4–10</strong><span>CARDS PER PACK</span></div>
+            </div>
+        </div>
+
+        <div class="featured-pack-display">
+            <div class="pack-aura"></div>
+            <div class="showcase-pack">
+                <div class="showcase-pack-inner">
+                    <span class="pack-brand">YBC</span>
+                    <div class="pack-question">?</div>
+                    <strong>GACHA</strong>
+                    <span class="pack-card-count">CARD PACK</span>
+                </div>
+            </div>
+            <span class="showcase-caption">YOUR NEXT BIG PULL</span>
+        </div>
+
+        <div class="featured-pack-action">
+            <div class="reward-timer">
+                <div class="timer-circle">
+                    <span>NEXT REWARD</span>
+                    <strong id="countdown">READY</strong>
+                </div>
+            </div>
+            <div class="reward-box">
+                <span class="reward-icon">◆</span>
+                <div><strong>Free points</strong><p id="claimStatus">Your reward is ready to claim!</p></div>
+            </div>
+            <button id="claimButton" class="claim-button" onclick="claimPoints()">Claim +10 Points</button>
+            <a href="shop.html" class="featured-shop-link">Browse all packs →</a>
+        </div>
+    </section>
+
+    <section class="progress-section">
+        <div class="section-heading">
+            <div><span class="eyebrow">YOUR JOURNEY</span><h2>Collection progress</h2></div>
+            <a href="collections.html" class="view-all">Open collection →</a>
+        </div>
+        <div class="progress-panel">
+            <div class="progress-topline"><strong>Collection completion</strong><span id="completionPercent">0%</span></div>
+            <div class="progress-track"><div class="progress-fill" id="completionBar"></div></div>
+            <div class="progress-stats">
+                <div class="progress-stat"><span class="progress-stat-icon">▣</span><div><strong id="totalCards">0</strong><span>Cards owned</span></div></div>
+                <div class="progress-stat"><span class="progress-stat-icon purple">✦</span><div><strong id="uniqueCards">0</strong><span>Unique cards</span></div></div>
+                <div class="progress-stat"><span class="progress-stat-icon gold">◆</span><div><strong id="packsOpened">0</strong><span>Packs opened</span></div></div>
+                <div class="progress-stat"><span class="progress-stat-icon green">✓</span><div><strong id="completionCount">0 / 0</strong><span>Discovered</span></div></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cards-section">
+        <div class="section-heading">
+            <div><span class="eyebrow">LATEST ADDITIONS</span><h2>Recently collected</h2><p>Your latest card discoveries will appear here.</p></div>
+            <a href="collections.html" class="view-all">View collection →</a>
+        </div>
+        <div class="card-showcase" id="recentCards">
+            <div class="empty-card-state"><div class="empty-card-icon">▣</div><strong>No cards collected yet</strong><p>Open your first pack to start building your collection.</p><a href="shop.html" class="small-action">Explore packs →</a></div>
+        </div>
+    </section>
+
+    <section class="cards-section rarest-section">
+        <div class="section-heading">
+            <div><span class="eyebrow">YOUR BEST PULLS</span><h2>Rarest cards</h2><p>Your most valuable discoveries will be shown here.</p></div>
+        </div>
+        <div class="card-showcase" id="rarestCards">
+            <div class="empty-card-state"><div class="empty-card-icon rare-icon">✦</div><strong>No rare discoveries yet</strong><p>Keep opening packs. Your next incredible pull could be just around the corner.</p></div>
+        </div>
+    </section>
+
+    <section class="rarity-section">
+        <div class="section-heading"><div><span class="eyebrow">KNOW YOUR ODDS</span><h2>Card rarities</h2><p>Eight different rarity levels. How far will your luck take you?</p></div></div>
+        <div class="rarity-grid">
+            <div class="rarity-item trash">TRASH</div><div class="rarity-item common">COMMON</div><div class="rarity-item uncommon">UNCOMMON</div><div class="rarity-item rare">RARE</div><div class="rarity-item epic">EPIC</div><div class="rarity-item legendary">LEGENDARY</div><div class="rarity-item mythic">MYTHIC</div><div class="rarity-item secret">SECRET</div>
+        </div>
+    </section>
+
+    <section class="shop-section">
+        <div class="section-heading"><div><span class="eyebrow">FIND YOUR NEXT FAVOURITE</span><h2>Choose your pack</h2><p>Three packs. Different costs. Different possibilities.</p></div><a href="shop.html" class="view-all">Full shop →</a></div>
+        <div class="pack-preview-grid">
+            <a href="shop.html" class="pack-preview"><div class="pack-symbol common-pack">C</div><h3>Common Pack</h3><p>4 cards per pack</p><span>10 POINTS</span></a>
+            <a href="shop.html" class="pack-preview"><div class="pack-symbol rare-pack">R</div><h3>Rare Pack</h3><p>7 cards per pack</p><span>50 POINTS</span></a>
+            <a href="shop.html" class="pack-preview"><div class="pack-symbol epic-pack">E</div><h3>Epic Pack</h3><p>10 cards per pack</p><span>100 POINTS</span></a>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <div class="footer-logo">YBC<span>GACHA</span></div>
+    <p>Collect. Open. Discover.</p>
+    <p class="copyright">© 2026 YBC Gacha. All rights reserved.</p>
+</footer>
+
+<script src="supabase.js"></script>
+<script src="script.js"></script>
+<script>
+(async function loadAccountDetails() {
+    const SESSION_KEY = "ybcGachaSession";
+    const token = localStorage.getItem(SESSION_KEY);
+    const accountArea = document.getElementById("accountArea");
+
+    function showLoggedOut() {
+        accountArea.innerHTML = '<div class="account-auth-links"><a class="account-login" href="login.html">Login / Sign up</a></div>';
+    }
+
+    function showPoints(points) {
+        const safePoints = Number(points) || 0;
+        ["navPoints", "mainPoints"].forEach(id => {
+            const element = document.getElementById(id);
+            if (element) element.textContent = safePoints.toLocaleString();
+        });
+        // Keep the existing site's local points display in sync for its current scripts.
+        localStorage.setItem("ybcPoints", String(safePoints));
+    }
+
+    if (!token) {
+        showLoggedOut();
+        return;
+    }
+
+    try {
+        const response = await fetch(SUPABASE_URL + "/functions/v1/username-auth", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "apikey": SUPABASE_KEY
+            },
+            body: JSON.stringify({ action: "me", token })
+        });
+        const result = await response.json();
+
+        if (!response.ok || !result.success || !result.player) {
+            localStorage.removeItem(SESSION_KEY);
+            showLoggedOut();
+            return;
+        }
+
+        const player = result.player;
+        const username = String(player.username || "Player");
+        showPoints(player.points);
+        accountArea.innerHTML = `
+            <div class="account-user">
+                <span class="account-user-label">SIGNED IN AS</span>
+                <span class="account-username" title="${username.replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}">${username.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}</span>
+            </div>
+            <button type="button" class="logout-button" id="logoutButton">Log out</button>
+        `;
+
+        document.getElementById("logoutButton").addEventListener("click", async function () {
+            this.disabled = true;
+            this.textContent = "Logging out…";
+            try {
+                await fetch(SUPABASE_URL + "/functions/v1/username-auth", {
+                    method: "POST",
+                    headers: {"Content-Type":"application/json", "apikey":SUPABASE_KEY},
+                    body: JSON.stringify({action:"logout", token})
+                });
+            } catch (error) {
+                console.warn("Logout request failed; clearing this browser session anyway.", error);
+            }
+            localStorage.removeItem(SESSION_KEY);
+            window.location.replace("login.html");
+        });
+    } catch (error) {
+        console.error("Could not load account details:", error);
+        accountArea.innerHTML = '<a href="login.html" class="account-button">Account</a>';
+    }
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop | YBC Gacha</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --shop-bg: #070A11;
+            --shop-panel: #0D1422;
+            --shop-panel-light: #111D30;
+            --shop-border: rgba(111, 151, 207, .16);
+            --shop-muted: #8793A8;
+            --shop-blue: #4D98FF;
+            --shop-blue-bright: #2678F5;
+        }
+
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            background:
+                radial-gradient(ellipse at 50% -18%, rgba(38,120,245,.19), transparent 48%),
+                var(--shop-bg);
+            color: #F4F7FC;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            backdrop-filter: blur(18px);
+            background: rgba(7,10,17,.82);
+            border-bottom: 1px solid rgba(117,157,214,.12);
+        }
+
+        .logo, .footer-logo { font-weight: 900; letter-spacing: -1px; }
+        .logo span, .footer-logo span { color: var(--shop-blue); }
+        .nav-links a { transition: color .2s ease; }
+        .nav-links a:hover, .nav-links a.active { color: #fff; }
+
+        .container { width: min(1120px, calc(100% - 40px)); margin: 0 auto; }
+
+        .shop-hero {
+            position: relative;
+            text-align: center;
+            padding: 82px 0 48px;
+        }
+        .shop-hero::before {
+            content: "";
+            position: absolute;
+            width: 360px;
+            height: 220px;
+            left: 50%;
+            top: 40px;
+            transform: translateX(-50%);
+            background: rgba(38,120,245,.16);
+            filter: blur(90px);
+            pointer-events: none;
+        }
+        .hero-content { position: relative; }
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #8CBFFF;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 2.4px;
+            text-transform: uppercase;
+        }
+        .eyebrow::before, .eyebrow::after {
+            content: "";
+            width: 18px;
+            height: 1px;
+            background: #367CCF;
+            opacity: .8;
+        }
+        .shop-hero h1 {
+            margin: 17px 0 12px;
+            font-size: clamp(38px, 6vw, 60px);
+            line-height: 1.04;
+            letter-spacing: -3px;
+            font-weight: 900;
+        }
+        .shop-hero h1 span {
+            background: linear-gradient(100deg, #77B7FF, #347EF5 55%, #9BBDFF);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .shop-hero p {
+            max-width: 520px;
+            margin: 0 auto;
+            color: var(--shop-muted);
+            font-size: 14px;
+            line-height: 1.8;
+        }
+        .shop-balance {
+            display: inline-flex;
+            align-items: center;
+            gap: 13px;
+            margin-top: 27px;
+            padding: 13px 20px;
+            border: 1px solid rgba(77,152,255,.32);
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(25,56,98,.78), rgba(13,20,34,.92));
+            box-shadow: 0 8px 35px rgba(0,0,0,.22), inset 0 1px rgba(255,255,255,.04);
+        }
+        .balance-icon {
+            display: grid;
+            place-items: center;
+            width: 34px;
+            height: 34px;
+            border-radius: 9px;
+            color: #A9D2FF;
+            background: rgba(77,152,255,.16);
+            font-size: 17px;
+        }
+        .balance-copy { display: flex; flex-direction: column; gap: 3px; text-align: left; }
+        #shopBalance { color: #fff; font-size: 18px; font-weight: 900; font-variant-numeric: tabular-nums; }
+        .balance-copy small { color: #8EA2BD; font-size: 9px; font-weight: 800; letter-spacing: 1.5px; }
+
+        .section-heading {
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            gap: 20px;
+            margin: 22px 0 22px;
+        }
+        .section-heading h2 { margin: 9px 0 5px; font-size: 25px; letter-spacing: -.8px; }
+        .section-heading p { margin: 0; color: var(--shop-muted); font-size: 12px; }
+        .section-note {
+            color: #8293AA;
+            font-size: 10px;
+            padding: 8px 11px;
+            border: 1px solid var(--shop-border);
+            background: rgba(13,20,34,.65);
+            border-radius: 8px;
+            white-space: nowrap;
+        }
+
+        .shop-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 20px;
+            margin: 0 0 66px;
+        }
+        .shop-pack {
+            --accent: #8293AA;
+            --accent-rgb: 130,147,170;
+            position: relative;
+            overflow: hidden;
+            padding: 17px;
+            border: 1px solid var(--shop-border);
+            border-radius: 17px;
+            background: linear-gradient(155deg, rgba(17,29,48,.94), rgba(10,16,27,.98) 65%);
+            box-shadow: 0 15px 45px rgba(0,0,0,.2);
+            transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+        }
+        .shop-pack:hover {
+            transform: translateY(-7px);
+            border-color: rgba(var(--accent-rgb),.65);
+            box-shadow: 0 20px 55px rgba(0,0,0,.32), 0 0 28px rgba(var(--accent-rgb),.09);
+        }
+        .shop-pack.rare { --accent: #65A9FF; --accent-rgb: 77,152,255; }
+        .shop-pack.epic {
+            --accent: #C28BFF;
+            --accent-rgb: 162,91,235;
+            background: linear-gradient(155deg, rgba(49,31,77,.62), rgba(13,17,31,.98) 66%);
+            border-color: rgba(194,139,255,.35);
+        }
+        .pack-art {
+            height: 205px;
+            display: grid;
+            place-items: center;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 22px;
+            border: 1px solid rgba(var(--accent-rgb),.19);
+            border-radius: 12px;
+            background:
+                radial-gradient(circle at 50% 48%, rgba(var(--accent-rgb),.24), transparent 48%),
+                linear-gradient(145deg, rgba(var(--accent-rgb),.13), rgba(7,10,17,.72));
+        }
+        .pack-art::before, .pack-art::after {
+            content: "";
+            position: absolute;
+            border: 1px solid rgba(var(--accent-rgb),.16);
+            border-radius: 50%;
+            width: 190px;
+            height: 190px;
+        }
+        .pack-art::after { width: 245px; height: 245px; opacity: .55; }
+        .pack-orbit {
+            position: absolute;
+            width: 155px;
+            height: 155px;
+            border: 1px dashed rgba(var(--accent-rgb),.3);
+            border-radius: 50%;
+            transform: rotate(-25deg) scaleY(.72);
+        }
+        .pack-art-symbol {
+            z-index: 1;
+            width: 103px;
+            height: 142px;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            border: 2px solid var(--accent);
+            color: #F4F8FF;
+            font-size: 48px;
+            font-weight: 900;
+            text-shadow: 0 4px 20px rgba(var(--accent-rgb),.6);
+            background: linear-gradient(145deg, rgba(var(--accent-rgb),.52), rgba(12,20,34,.98) 78%);
+            box-shadow: 0 18px 35px rgba(0,0,0,.48), 0 0 35px rgba(var(--accent-rgb),.2), inset 0 1px rgba(255,255,255,.25);
+            transform: rotate(-7deg);
+            position: relative;
+        }
+        .pack-art-symbol::after {
+            content: "";
+            position: absolute;
+            inset: 7px;
+            border: 1px solid rgba(255,255,255,.22);
+            border-radius: 7px;
+        }
+        .pack-art-symbol span { position: relative; z-index: 2; }
+        .pack-topline {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+        .pack-category {
+            color: var(--accent);
+            font-size: 9px;
+            font-weight: 900;
+            letter-spacing: 2px;
+        }
+        .pack-tag {
+            padding: 5px 8px;
+            border-radius: 6px;
+            color: var(--accent);
+            background: rgba(var(--accent-rgb),.11);
+            border: 1px solid rgba(var(--accent-rgb),.2);
+            font-size: 8px;
+            font-weight: 800;
+            letter-spacing: .8px;
+        }
+        .shop-pack h2 { margin: 11px 0 8px; font-size: 21px; letter-spacing: -.6px; }
+        .pack-description {
+            min-height: 40px;
+            margin: 0;
+            color: var(--shop-muted);
+            font-size: 11px;
+            line-height: 1.75;
+        }
+        .pack-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 19px 0;
+            padding: 14px 13px;
+            border: 1px solid rgba(117,157,214,.12);
+            border-radius: 10px;
+            background: rgba(5,9,16,.42);
+        }
+        .pack-detail { display: flex; flex-direction: column; gap: 6px; }
+        .pack-detail + .pack-detail { padding-left: 16px; border-left: 1px solid rgba(117,157,214,.14); }
+        .pack-detail span {
+            color: #718198;
+            font-size: 8px;
+            font-weight: 900;
+            letter-spacing: 1.4px;
+        }
+        .pack-detail strong { color: #F0F5FC; font-size: 14px; }
+        .pack-detail strong.minimum { color: var(--accent); }
+        .pack-purchase {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-top: 3px;
+        }
+        .pack-price { color: #F4F7FC; font-size: 17px; font-weight: 900; white-space: nowrap; }
+        .pack-price small { color: #8293AA; font-size: 9px; font-weight: 700; }
+        .buy-pack-button {
+            border: 1px solid rgba(var(--accent-rgb),.55);
+            border-radius: 8px;
+            padding: 12px 15px;
+            color: white;
+            background: linear-gradient(135deg, rgba(var(--accent-rgb),.95), rgba(var(--accent-rgb),.62));
+            box-shadow: 0 5px 18px rgba(var(--accent-rgb),.17);
+            font-family: inherit;
+            font-size: 10px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: transform .2s ease, filter .2s ease, box-shadow .2s ease;
+        }
+        .buy-pack-button:hover { transform: translateY(-2px); filter: brightness(1.12); box-shadow: 0 8px 23px rgba(var(--accent-rgb),.28); }
+        .buy-pack-button:active { transform: translateY(0); }
+        .epic .buy-pack-button { background: linear-gradient(135deg, #A45BEB, #7140B8); }
+
+        .shop-information {
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin: 0 0 75px;
+            padding: 23px 25px;
+            border: 1px solid rgba(77,152,255,.2);
+            border-radius: 13px;
+            background: linear-gradient(110deg, rgba(24,54,91,.48), rgba(13,20,34,.86) 60%);
+        }
+        .info-icon {
+            flex: 0 0 43px;
+            width: 43px;
+            height: 43px;
+            display: grid;
+            place-items: center;
+            border-radius: 11px;
+            color: #9BCBFF;
+            background: rgba(77,152,255,.14);
+            border: 1px solid rgba(77,152,255,.2);
+            font-size: 19px;
+        }
+        .shop-information h2 { margin: 0 0 6px; font-size: 14px; }
+        .shop-information p { margin: 0; color: var(--shop-muted); font-size: 11px; line-height: 1.8; }
+
+        footer {
+            border-top: 1px solid rgba(117,157,214,.1);
+            background: rgba(5,8,14,.55);
+            text-align: center;
+            padding: 30px 20px;
+        }
+        footer p { color: #718198; font-size: 11px; }
+        footer .copyright { margin-top: 18px; font-size: 9px; }
+
+        @media (max-width: 850px) {
+            .shop-grid { grid-template-columns: 1fr; max-width: 480px; margin-left: auto; margin-right: auto; }
+            .section-heading { align-items: start; flex-direction: column; }
+            .section-note { display: none; }
+        }
+        @media (max-width: 520px) {
+            .container { width: min(100% - 28px, 1120px); }
+            .shop-hero { padding: 62px 0 35px; }
+            .shop-hero h1 { letter-spacing: -2px; }
+            .shop-information { align-items: flex-start; padding: 18px; }
+            .pack-purchase { align-items: stretch; flex-direction: column; }
+            .buy-pack-button { width: 100%; padding: 14px; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="navbar">
+    <a href="index.html" class="logo">YBC<span>GACHA</span></a>
+
+    <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="shop.html" class="active">Shop</a>
+        <a href="collections.html">Collections</a>
+    </nav>
+
+    <div class="nav-right">
+        <div class="points-display">
+            <span class="coin-icon">◆</span>
+            <span id="shopPoints">0</span>
+            <span class="points-label">POINTS</span>
+        </div>
+        <a href="login.html" class="account-button">Login</a>
+    </div>
+</header>
+
+<main class="container">
+    <section class="shop-hero">
+        <div class="hero-content">
+            <span class="eyebrow">THE PACK STORE</span>
+            <h1>Find your next <span>pull.</span></h1>
+            <p>Choose your pack, spend your points and discover new cards for your collection.</p>
+
+            <div class="shop-balance">
+                <div class="balance-icon">◆</div>
+                <div class="balance-copy">
+                    <span id="shopBalance">0</span>
+                    <small>POINTS AVAILABLE</small>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="section-heading">
+            <div>
+                <span class="eyebrow">AVAILABLE PACKS</span>
+                <h2>Choose your pack</h2>
+                <p>Every pack has its own size, price and minimum rarity.</p>
+            </div>
+            <div class="section-note">✦ &nbsp; Three packs currently available</div>
+        </div>
+
+        <div class="shop-grid">
+            <article class="shop-pack common">
+                <div class="pack-art common-art">
+                    <div class="pack-orbit"></div>
+                    <div class="pack-art-symbol"><span>C</span></div>
+                </div>
+                <div class="pack-topline">
+                    <span class="pack-category">STARTER PACK</span>
+                    <span class="pack-tag">4 CARDS</span>
+                </div>
+                <h2>Common Pack</h2>
+                <p class="pack-description">A good place to start. Open your first cards and begin building your collection.</p>
+                <div class="pack-details">
+                    <div class="pack-detail"><span>CARDS INCLUDED</span><strong>4 Cards</strong></div>
+                    <div class="pack-detail"><span>MINIMUM RARITY</span><strong class="minimum">Trash</strong></div>
+                </div>
+                <div class="pack-purchase">
+                    <div class="pack-price">◆ 10 <small>POINTS</small></div>
+                    <button class="buy-pack-button" onclick="buyPack('common')">Purchase Pack &nbsp; →</button>
+                </div>
+            </article>
+
+            <article class="shop-pack rare">
+                <div class="pack-art rare-art">
+                    <div class="pack-orbit"></div>
+                    <div class="pack-art-symbol"><span>R</span></div>
+                </div>
+                <div class="pack-topline">
+                    <span class="pack-category">ADVANCED PACK</span>
+                    <span class="pack-tag">7 CARDS</span>
+                </div>
+                <h2>Rare Pack</h2>
+                <p class="pack-description">A step up from the basics, with better odds and a guaranteed Rare card or higher.</p>
+                <div class="pack-details">
+                    <div class="pack-detail"><span>CARDS INCLUDED</span><strong>7 Cards</strong></div>
+                    <div class="pack-detail"><span>MINIMUM RARITY</span><strong class="minimum">Rare</strong></div>
+                </div>
+                <div class="pack-purchase">
+                    <div class="pack-price">◆ 50 <small>POINTS</small></div>
+                    <button class="buy-pack-button" onclick="buyPack('rare')">Purchase Pack &nbsp; →</button>
+                </div>
+            </article>
+
+            <article class="shop-pack epic">
+                <div class="pack-art epic-art">
+                    <div class="pack-orbit"></div>
+                    <div class="pack-art-symbol"><span>E</span></div>
+                </div>
+                <div class="pack-topline">
+                    <span class="pack-category">PREMIUM PACK</span>
+                    <span class="pack-tag">10 CARDS</span>
+                </div>
+                <h2>Epic Pack</h2>
+                <p class="pack-description">The premium opening. Ten cards with a guaranteed Epic card or higher.</p>
+                <div class="pack-details">
+                    <div class="pack-detail"><span>CARDS INCLUDED</span><strong>10 Cards</strong></div>
+                    <div class="pack-detail"><span>MINIMUM RARITY</span><strong class="minimum">Epic</strong></div>
+                </div>
+                <div class="pack-purchase">
+                    <div class="pack-price">◆ 100 <small>POINTS</small></div>
+                    <button class="buy-pack-button" onclick="buyPack('epic')">Purchase Pack &nbsp; →</button>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <section class="shop-information">
+        <div class="info-icon">✦</div>
+        <div>
+            <h2>How packs work</h2>
+            <p>Each pack contains randomly selected cards. Every card has a rarity and one variant: Normal, Gold, Diamond or Holo. Duplicates are possible, and higher-tier packs have guaranteed minimum rarities.</p>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <div class="footer-logo">YBC<span>GACHA</span></div>
+    <p>Collect. Open. Discover.</p>
+    <p class="copyright">© 2026 YBC Gacha. All rights reserved.</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
