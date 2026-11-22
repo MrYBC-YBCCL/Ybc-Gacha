@@ -1,0 +1,526 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account | YBC Gacha</title>
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            background: radial-gradient(ellipse at 50% 0%, rgba(38,120,245,.18), transparent 55%), #070A11;
+            color: #F4F7FC;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 6%;
+            border-bottom: 1px solid rgba(117,157,214,.12);
+            background: rgba(7,10,17,.85);
+        }
+
+        .logo {
+            color: white;
+            font-size: 21px;
+            font-weight: 900;
+            text-decoration: none;
+            letter-spacing: -1px;
+        }
+
+        .logo span { color: #4D98FF; }
+
+        .back-link {
+            color: #8793A8;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .back-link:hover { color: white; }
+
+        main {
+            flex: 1;
+            display: grid;
+            place-items: center;
+            padding: 45px 20px;
+        }
+
+        .account-card {
+            width: 100%;
+            max-width: 440px;
+            padding: 35px;
+            border: 1px solid rgba(111,151,207,.19);
+            border-radius: 18px;
+            background: linear-gradient(150deg, #111D30, #0A101B);
+            box-shadow: 0 25px 80px rgba(0,0,0,.35);
+        }
+
+        .account-heading { text-align: center; }
+
+        .account-icon {
+            width: 55px;
+            height: 55px;
+            display: grid;
+            place-items: center;
+            margin: 0 auto 20px;
+            border-radius: 14px;
+            background: rgba(77,152,255,.15);
+            border: 1px solid rgba(77,152,255,.3);
+            color: #77B7FF;
+            font-size: 23px;
+        }
+
+        .eyebrow {
+            color: #77B7FF;
+            font-size: 9px;
+            font-weight: 900;
+            letter-spacing: 2px;
+        }
+
+        h1 {
+            margin: 12px 0 9px;
+            font-size: 29px;
+            letter-spacing: -1.3px;
+        }
+
+        .subtitle {
+            margin: 0 0 27px;
+            color: #8793A8;
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        .tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 7px;
+            padding: 5px;
+            margin-bottom: 25px;
+            border-radius: 10px;
+            background: #080E18;
+        }
+
+        .tab {
+            padding: 12px;
+            border: 0;
+            border-radius: 7px;
+            background: transparent;
+            color: #8293AA;
+            font-family: inherit;
+            font-size: 11px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .tab.active {
+            background: #1B3659;
+            color: #A9D2FF;
+        }
+
+        .field { margin-bottom: 17px; }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #C6D2E2;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid rgba(117,157,214,.2);
+            border-radius: 8px;
+            outline: none;
+            background: #080E18;
+            color: white;
+            font-family: inherit;
+            font-size: 12px;
+        }
+
+        input:focus {
+            border-color: #4D98FF;
+            box-shadow: 0 0 0 3px rgba(77,152,255,.1);
+        }
+
+        input::placeholder { color: #53647C; }
+
+        .password-wrap { position: relative; }
+
+        .password-wrap input { padding-right: 65px; }
+
+        .show-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: 0;
+            background: none;
+            color: #77B7FF;
+            font-size: 10px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 15px;
+            margin-top: 8px;
+            border: 1px solid rgba(77,152,255,.5);
+            border-radius: 8px;
+            background: linear-gradient(135deg, #2678F5, #1557B8);
+            color: white;
+            font-family: inherit;
+            font-size: 11px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .submit-button:hover {
+            filter: brightness(1.15);
+            transform: translateY(-2px);
+        }
+
+        .submit-button:disabled {
+            opacity: .55;
+            cursor: wait;
+            transform: none;
+        }
+
+        .message {
+            display: none;
+            margin-top: 18px;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        .message.error {
+            display: block;
+            color: #FF9999;
+            background: rgba(255,70,70,.09);
+            border: 1px solid rgba(255,70,70,.2);
+        }
+
+        .message.success {
+            display: block;
+            color: #8DE5B1;
+            background: rgba(50,200,120,.09);
+            border: 1px solid rgba(50,200,120,.2);
+        }
+
+        .account-footer {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(117,157,214,.12);
+            color: #66758B;
+            font-size: 10px;
+            text-align: center;
+            line-height: 1.8;
+        }
+
+        footer {
+            padding: 22px;
+            text-align: center;
+            border-top: 1px solid rgba(117,157,214,.1);
+            color: #53647C;
+            font-size: 9px;
+        }
+
+        @media(max-width: 480px) {
+            .account-card { padding: 25px 20px; }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="navbar">
+    <a href="index.html" class="logo">YBC<span>GACHA</span></a>
+    <a href="index.html" class="back-link">← Back to Home</a>
+</header>
+
+<main>
+    <section class="account-card">
+
+        <div class="account-heading">
+            <div class="account-icon">◆</div>
+            <span class="eyebrow">PLAYER ACCOUNTS</span>
+            <h1 id="heading">Welcome back.</h1>
+            <p class="subtitle" id="subtitle">
+                Sign in to access your collection and points.
+            </p>
+        </div>
+
+<div id="loggedInPanel" hidden>
+    <p style="color:#8DE5B1;font-size:12px;text-align:center;">
+        You're already logged in.
+    </p>
+    <p style="color:#8793A8;font-size:11px;text-align:center;">
+        Log out to switch accounts or register a new player.
+    </p>
+    <button type="button" class="submit-button" id="logoutButton">
+        LOG OUT / SWITCH ACCOUNT
+    </button>
+</div>
+        <div class="tabs">
+            <button class="tab active" id="loginTab" type="button">LOGIN</button>
+            <button class="tab" id="registerTab" type="button">CREATE ACCOUNT</button>
+        </div>
+
+        <form id="accountForm">
+
+            <div class="field">
+                <label for="username">USERNAME</label>
+                <input
+                    type="text"
+                    id="username"
+                    placeholder="Enter your username"
+                    minlength="3"
+                    maxlength="20"
+                    autocomplete="username"
+                    required
+                >
+            </div>
+
+            <div class="field">
+                <label for="password">PASSWORD</label>
+                <div class="password-wrap">
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter your password"
+                        minlength="8"
+                        maxlength="128"
+                        autocomplete="current-password"
+                        required
+                    >
+                    <button type="button" class="show-password" id="showPassword">
+                        SHOW
+                    </button>
+                </div>
+            </div>
+
+            <div class="field" id="confirmField" hidden>
+                <label for="confirmPassword">CONFIRM PASSWORD</label>
+                <input
+                    type="password"
+                    id="confirmPassword"
+                    placeholder="Enter your password again"
+                    minlength="8"
+                    maxlength="128"
+                    autocomplete="new-password"
+                >
+            </div>
+
+            <button type="submit" class="submit-button" id="submitButton">
+                SIGN IN →
+            </button>
+
+        </form>
+
+        <div class="message" id="message"></div>
+
+        <div class="account-footer">
+            Your collection and progress will be connected to your account.
+            <br>
+            No email address required.
+            <br>
+            YBC Gacha · Player Accounts
+        </div>
+
+    </section>
+</main>
+
+<footer>
+    © 2026 YBC Gacha. All rights reserved.
+</footer>
+
+<script type="module" src="supabase.js"></script>
+<script type="module">
+    let currentMode = "login";
+
+    const API_URL = window.SUPABASE_URL + "/functions/v1/username-auth";
+    const SESSION_KEY = "ybcGachaSession";
+
+    const form = document.getElementById("accountForm");
+    const usernameInput = document.getElementById("username");
+    const passwordInput = document.getElementById("password");
+    const confirmInput = document.getElementById("confirmPassword");
+    const confirmField = document.getElementById("confirmField");
+    const message = document.getElementById("message");
+    const submitButton = document.getElementById("submitButton");
+
+    function showMessage(text, type) {
+        message.textContent = text;
+        message.className = "message " + type;
+    }
+
+    function clearMessage() {
+        message.textContent = "";
+        message.className = "message";
+    }
+
+    async function authRequest(body) {
+        const response = await fetch(API_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "apikey": window.SUPABASE_KEY
+            },
+            body: JSON.stringify(body)
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+            throw new Error(result.error || "Something went wrong.");
+        }
+
+        return result;
+    }
+
+    function switchMode(mode) {
+        currentMode = mode;
+        clearMessage();
+
+        const registering = mode === "register";
+
+        document.getElementById("loginTab").classList.toggle("active", !registering);
+        document.getElementById("registerTab").classList.toggle("active", registering);
+
+        document.getElementById("heading").textContent =
+            registering ? "Join the collection." : "Welcome back.";
+
+        document.getElementById("subtitle").textContent =
+            registering
+            ? "Create your player account and start collecting."
+            : "Sign in to access your collection and points.";
+
+        confirmField.hidden = !registering;
+        confirmInput.required = registering;
+        confirmInput.value = "";
+
+        passwordInput.autocomplete =
+            registering ? "new-password" : "current-password";
+
+        submitButton.textContent =
+            registering ? "CREATE ACCOUNT →" : "SIGN IN →";
+    }
+
+    document.getElementById("loginTab").addEventListener("click", () => {
+        switchMode("login");
+    });
+document.getElementById("registerTab").addEventListener("click", () => {
+    console.log("Register tab clicked");
+    switchMode("register");
+});
+    document.getElementById("showPassword").addEventListener("click", () => {
+        const visible = passwordInput.type === "text";
+        passwordInput.type = visible ? "password" : "text";
+        document.getElementById("showPassword").textContent =
+            visible ? "SHOW" : "HIDE";
+    });
+
+  
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        clearMessage();
+
+        const username = usernameInput.value.trim();
+        const password = passwordInput.value;
+
+        if (!/^[a-zA-Z0-9_]{3,20}$/.test(username)) {
+            showMessage(
+                "Username must be 3–20 characters and contain only letters, numbers or underscores.",
+                "error"
+            );
+            return;
+        }
+
+        if (password.length < 8 || password.length > 128) {
+            showMessage("Password must be between 8 and 128 characters.", "error");
+            return;
+        }
+
+        if (currentMode === "register" &&
+            password !== confirmInput.value) {
+            showMessage("Your passwords do not match.", "error");
+            return;
+        }
+
+        submitButton.disabled = true;
+        submitButton.textContent = "PLEASE WAIT...";
+
+        try {
+            const result = await authRequest({
+                action: currentMode,
+                username: username,
+                password: password
+            });
+
+            localStorage.setItem(SESSION_KEY, result.token);
+
+            showMessage(
+                currentMode === "register"
+                ? "Account created successfully! Welcome to YBC Gacha."
+                : "Login successful! Welcome back.",
+                "success"
+            );
+
+            setTimeout(() => {
+                window.location.href = "index.html";
+            }, 900);
+
+        } catch (error) {
+            showMessage(error.message || "Something went wrong.", "error");
+        } finally {
+            submitButton.disabled = false;
+            submitButton.textContent =
+                currentMode === "register" ? "CREATE ACCOUNT →" : "SIGN IN →";
+        }
+    });
+
+    async function checkSession() {
+    const token = localStorage.getItem(SESSION_KEY);
+
+    if (!token) return;
+
+    try {
+        await authRequest({
+            action: "me",
+            token: token
+        });
+
+        // Keep the user on the account page.
+        // Don't automatically redirect to index.html.
+        document.querySelector(".tabs").hidden = true;
+        form.hidden = true;
+        document.getElementById("loggedInPanel").hidden = false;
+
+    } catch (error) {
+        localStorage.removeItem(SESSION_KEY);
+    }
+}
+checkSession();
+</script>
+
+</body>
+</html>
