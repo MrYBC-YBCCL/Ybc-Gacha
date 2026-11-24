@@ -1,0 +1,79 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YBC Gacha | Card</title>
+    <link rel="stylesheet" href="card.css">
+</head>
+<body>
+
+    <main class="page">
+        <div class="card-shell">
+            <div class="card">
+
+                <header class="card-header">
+                    <h1 id="cardName">CARD NAME</h1>
+                    <div class="header-line"></div>
+                </header>
+
+                <div class="artwork-frame">
+                    <div class="artwork">
+                        <img id="cardImage" alt="Card artwork">
+                        <div class="image-placeholder" id="placeholder">
+                            CARD ARTWORK
+                        </div>
+                    </div>
+                </div>
+
+                <section class="card-information">
+                    <h2 id="cardRarity">MYTHIC</h2>
+                    <div class="rarity-line"></div>
+                    <p class="collection-label">YBC GACHA COLLECTION</p>
+                </section>
+
+                <footer class="card-footer">
+                    <span id="cardNumber">#001 / 160</span>
+                </footer>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+
+        const name = params.get("name") || "CARD NAME";
+        const rarity = params.get("rarity") || "MYTHIC";
+        const number = params.get("number") || "001";
+        const image = params.get("image");
+
+        document.getElementById("cardName").textContent = name;
+        document.getElementById("cardRarity").textContent = rarity.toUpperCase();
+        document.getElementById("cardNumber").textContent =
+            `#${number} / 160`;
+
+        const rarityColors = {
+            common: "#A0A0A0",
+            uncommon: "#65A875",
+            rare: "#3989D8",
+            epic: "#A34BCB",
+            legendary: "#D99A36",
+            mythic: "#8E1424",
+            secret: "#D5D5D5"
+        };
+
+        document.getElementById("cardRarity").style.color =
+            rarityColors[rarity.toLowerCase()] || "#8E1424";
+
+        if (image) {
+            const cardImage = document.getElementById("cardImage");
+            cardImage.src = image;
+            cardImage.style.display = "block";
+            document.getElementById("placeholder").style.display = "none";
+        }
+    </script>
+
+</body>
+</html>

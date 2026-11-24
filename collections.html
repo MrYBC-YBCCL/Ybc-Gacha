@@ -1,0 +1,579 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YBC Gacha | Collection</title>
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+.collection-page{width:90%;max-width:1250px;margin:auto}
+.collection-header{padding:45px 0 25px}
+.collection-header h1{font-size:34px;font-weight:900;letter-spacing:-1.5px;margin-top:10px}
+.collection-header h1 span{color:#72adff}
+.collection-header p{color:#8b91a4;font-size:12px;margin-top:10px}
+.collection-overview{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:28px}
+.overview-card{padding:21px;background:linear-gradient(145deg,#171b28,#10121b);border:1px solid #292d3b;border-radius:12px;display:flex;align-items:center;gap:15px}
+.overview-icon{width:43px;height:43px;flex-shrink:0;border-radius:10px;display:grid;place-items:center;background:#19365c;color:#80b5ff;font-size:19px}
+.overview-icon.purple{background:#302047;color:#c08aff}
+.overview-icon.gold{background:#3b3020;color:#ffcb65}
+.overview-card span{color:#8b91a4;font-size:9px;font-weight:800;letter-spacing:1px}
+.overview-card h2{font-size:25px;font-weight:900;margin-top:5px}
+.collection-progress{padding:22px;background:linear-gradient(135deg,#151a28,#10121b);border:1px solid #292d3b;border-radius:12px;margin-bottom:38px}
+.progress-heading{display:flex;justify-content:space-between;margin-bottom:13px}
+.progress-heading strong{font-size:12px}
+.progress-heading span{color:#80b5ff;font-size:12px;font-weight:900}
+.collection-progress-track{height:9px;background:#292d3a;border-radius:20px;overflow:hidden}
+.collection-progress-fill{width:0%;height:100%;border-radius:20px;background:linear-gradient(90deg,#347fff,#79b8ff);transition:width .5s}
+.collection-progress p{color:#858da1;font-size:10px;margin-top:11px}
+.collection-toolbar{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:19px;flex-wrap:wrap}
+.collection-toolbar h2{font-size:20px;font-weight:900}
+.collection-toolbar p{color:#8b91a4;font-size:10px;margin-top:6px}
+.collection-filters{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.collection-search,.collection-select{height:39px;padding:0 13px;background:#141824;border:1px solid #303749;border-radius:7px;color:#f5f6fb;font-family:inherit;font-size:10px;outline:none}
+.collection-search{width:190px}
+.collection-search::placeholder{color:#788196}
+.collection-search:focus,.collection-select:focus{border-color:#528fe8}
+.collection-select{cursor:pointer}
+.collection-select option{background:#141824;color:white}
+.collection-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:15px;min-height:200px}
+.collection-empty{grid-column:1/-1;min-height:280px;padding:35px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:#ffffff03;border:1px dashed #343a4a;border-radius:12px}
+.empty-icon{width:62px;height:62px;border-radius:15px;display:grid;place-items:center;background:#192b46;color:#77afff;font-size:27px;margin-bottom:17px}
+.collection-empty h3{font-size:15px;font-weight:900}
+.collection-empty p{color:#8b91a4;font-size:11px;margin-top:8px;line-height:1.7;max-width:350px}
+.collection-empty a{margin-top:18px;padding:11px 18px;border-radius:7px;background:#347fff;color:white;font-size:10px;font-weight:900}
+.collection-card{padding:10px;background:linear-gradient(145deg,#191d2a,#10121b);border:1px solid #303749;border-radius:11px;transition:.25s;min-width:0}
+.collection-card:hover{transform:translateY(-5px);border-color:#528fe8;box-shadow:0 12px 25px #0006}
+.collection-card-art{width:100%;aspect-ratio:3/4;border-radius:7px;overflow:hidden;background:linear-gradient(145deg,#203d65,#101725);display:grid;place-items:center;color:#8dbdff;font-size:35px;font-weight:900;margin-bottom:11px}
+.collection-card-art img{width:100%;height:100%;object-fit:cover}
+.collection-card h3{font-size:11px;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.collection-card-id{color:#788196;font-size:9px;margin-top:5px}
+.collection-card-details{display:flex;justify-content:space-between;align-items:center;gap:5px;margin-top:8px}
+.card-rarity{font-size:8px;font-weight:900;letter-spacing:.5px}
+.card-variant{font-size:8px;color:#9ca7bc}
+.rarity-trash{color:#929292}.rarity-common{color:#c4c9d1}.rarity-uncommon{color:#50d38a}.rarity-rare{color:#55a2ff}.rarity-epic{color:#bd86ff}.rarity-legendary{color:#ffca58}.rarity-mythic{color:#ff759a}.rarity-secret{color:#51e4d3}
+.variant-gold{border-color:#b58b35;box-shadow:inset 0 0 15px #b58b3515}
+.variant-diamond{border-color:#55bde8;box-shadow:inset 0 0 15px #55bde815}
+.variant-holo{border-color:#b77cff;box-shadow:inset 0 0 15px #b77cff15}
+.collection-card.undiscovered{border-color:#292e3b;background:linear-gradient(145deg,#151823,#0d0f16);box-shadow:none}
+.collection-card.undiscovered:hover{transform:none;border-color:#3b4355;box-shadow:none}
+.collection-card-art.unknown-art{position:relative;background:radial-gradient(circle at 50% 42%,#252b3b 0,#151925 48%,#0d1018 100%);border:1px solid #30384a;color:#78849b;font-size:66px;text-shadow:0 4px 20px #000}
+.unknown-art:after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,transparent 0,transparent 12px,#ffffff04 12px,#ffffff04 24px);pointer-events:none}
+.unknown-label{color:#747e93;font-size:8px;font-weight:900;letter-spacing:1.5px}
+.collection-card.undiscovered h3,.collection-card.undiscovered .collection-card-id,.collection-card.undiscovered .card-rarity,.collection-card.undiscovered .card-variant{color:#687286}
+.collection-card.undiscovered .collection-card-details{opacity:.55}
+.collection-bottom{margin:35px 0 55px;padding:20px;border:1px solid #292d3b;border-radius:10px;background:#11141e;display:flex;align-items:center;justify-content:space-between;gap:15px}
+.collection-bottom strong{font-size:12px}
+.collection-bottom p{color:#8b91a4;font-size:10px;margin-top:5px}
+.collection-bottom a{color:#80b5ff;font-size:10px;font-weight:900;white-space:nowrap}
+.status-message{padding:12px;margin-bottom:18px;border-radius:8px;background:#141824;color:#8b91a4;font-size:11px;display:none}
+.status-message.error{display:block;color:#ff8585;border:1px solid #713b45}
+.status-message.info{display:block}
+@media(max-width:850px){.collection-grid{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:600px){
+.collection-page{width:94%}
+.collection-header h1{font-size:27px}
+.collection-overview{grid-template-columns:1fr}
+.collection-toolbar{align-items:flex-start;flex-direction:column}
+.collection-filters{width:100%}
+.collection-search{width:100%;flex:1}
+.collection-select{flex:1;min-width:0}
+.collection-grid{grid-template-columns:repeat(2,1fr)}
+.collection-bottom{align-items:flex-start;flex-direction:column}
+}
+</style>
+</head>
+
+<body>
+
+<header class="navbar">
+<a href="index.html" class="logo">YBC<span>GACHA</span></a>
+<nav class="nav-links">
+<a href="index.html">Home</a>
+<a href="shop.html">Shop</a>
+<a href="collections.html" class="active">Collection</a>
+</nav>
+<div class="nav-right">
+<div class="points-display">
+<span class="coin-icon">◆</span>
+<span id="collectionPoints">0</span>
+<span class="points-label">POINTS</span>
+</div>
+<a href="login.html" class="account-button">Account</a>
+</div>
+</header>
+
+<main class="collection-page">
+
+<section class="collection-header">
+<span class="eyebrow">YBC GACHA YOUR DISCOVERIES</span>
+<h1>Card <span>Catalogue.</span></h1>
+<p>Discover the full catalogue. Cards you have not collected remain hidden.</p>
+</section>
+
+<section class="collection-overview">
+<div class="overview-card">
+<div class="overview-icon">▣</div>
+<div><span>PUBLISHED CARDS</span><h2 id="totalCards">0</h2></div>
+</div>
+<div class="overview-card">
+<div class="overview-icon purple">✦</div>
+<div><span>AVAILABLE VARIANTS</span><h2 id="uniqueCards">0</h2></div>
+</div>
+<div class="overview-card">
+<div class="overview-icon gold">◆</div>
+<div><span>RARITIES</span><h2 id="rarityCount">0</h2></div>
+</div>
+</section>
+
+<section class="collection-progress">
+<div class="progress-heading">
+<strong>Collection completion</strong>
+<span id="progressPercent">0%</span>
+</div>
+<div class="collection-progress-track">
+<div class="collection-progress-fill" id="progressBar"></div>
+</div>
+<p id="progressDescription">Loading your collection...</p>
+</section>
+
+<section class="collection-catalogue">
+<div class="collection-toolbar">
+<div>
+<span class="eyebrow">YOUR DISCOVERIES</span>
+<h2>Your card collection</h2>
+<p id="resultCount">Loading cards...</p>
+</div>
+<div class="collection-filters">
+<input type="text" id="searchInput" class="collection-search" placeholder="Search cards...">
+<select id="rarityFilter" class="collection-select">
+<option value="all">All rarities</option>
+<option value="Trash">Trash</option>
+<option value="Common">Common</option>
+<option value="Uncommon">Uncommon</option>
+<option value="Rare">Rare</option>
+<option value="Epic">Epic</option>
+<option value="Legendary">Legendary</option>
+<option value="Mythic">Mythic</option>
+<option value="Secret">Secret</option>
+</select>
+<select id="variantFilter" class="collection-select">
+<option value="all">All variants</option>
+<option value="Normal">Normal</option>
+<option value="Gold">Gold</option>
+<option value="Diamond">Diamond</option>
+<option value="Holo">Holo</option>
+</select>
+</div>
+</div>
+
+<div id="collectionStatus" class="status-message"></div>
+<div class="collection-grid" id="collectionGrid"></div>
+</section>
+
+<section class="collection-bottom">
+<div>
+<strong>Looking for your next discovery?</strong>
+<p>Visit the shop and try your luck with a new card pack.</p>
+</div>
+<a href="shop.html">BROWSE PACKS →</a>
+</section>
+</main>
+
+<footer>
+<div class="footer-logo">YBC<span>GACHA</span></div>
+<p>Collect. Open. Discover.</p>
+<p class="copyright">© 2026 YBC Gacha. All rights reserved.</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script type="module" src="supabase.js"></script>
+
+
+<script>
+const API_URL = "https://fselbwilstujrholgdld.supabase.co/functions/v1/clever-responder";
+const SESSION_KEY = "ybcGachaSession";
+
+const rarityClasses = {
+    Trash: "rarity-trash",
+    Common: "rarity-common",
+    Uncommon: "rarity-uncommon",
+    Rare: "rarity-rare",
+    Epic: "rarity-epic",
+    Legendary: "rarity-legendary",
+    Mythic: "rarity-mythic",
+    Secret: "rarity-secret"
+};
+
+const variantClasses = {
+    Gold: "variant-gold",
+    Diamond: "variant-diamond",
+    Holo: "variant-holo"
+};
+
+let catalogue = [];
+let inventory = new Map();
+
+const grid = document.getElementById("collectionGrid");
+const statusBox = document.getElementById("collectionStatus");
+
+function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, c => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+    })[c]);
+}
+
+function setStatus(message, type = "info") {
+    statusBox.textContent = message;
+    statusBox.className = "status-message " + type;
+}
+
+function clearStatus() {
+    statusBox.textContent = "";
+    statusBox.className = "status-message";
+}
+
+function makeCardKey(id, variant) {
+    return String(id) + "|" + String(variant || "Normal").toLowerCase();
+}
+
+function updatePoints() {
+    document.getElementById("collectionPoints").textContent =
+        Number(localStorage.getItem("ybcPoints")) || 0;
+}
+
+// Send a request to the existing Supabase Edge Function.
+async function api(action, data = {}, requireLogin = true) {
+    const sessionToken = localStorage.getItem(SESSION_KEY);
+
+    if (requireLogin && !sessionToken) {
+        throw new Error("Please log in to load your collection.");
+    }
+
+    const response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "apikey": SUPABASE_KEY
+        },
+        body: JSON.stringify({
+            ...(sessionToken ? { token: sessionToken } : {}),
+            action,
+            ...data
+        })
+    });
+
+    let result;
+
+    try {
+        result = await response.json();
+    } catch {
+        throw new Error("The server returned an invalid response.");
+    }
+
+    if (!response.ok || result.success === false) {
+        throw new Error(
+            result.error || result.message || "Server request failed."
+        );
+    }
+
+    return result;
+}
+
+// Convert the Supabase Storage image path into a public image URL.
+function getCardImage(imagePath) {
+    if (!imagePath) return "";
+
+    if (imagePath.startsWith("http://") ||
+        imagePath.startsWith("https://")) {
+        return imagePath;
+    }
+
+    try {
+        const { data } = supabaseClient
+            .storage
+            .from("gacha-card-art")
+            .getPublicUrl(imagePath);
+
+        return data?.publicUrl || "";
+    } catch (error) {
+        console.error("Could not create card image URL:", error);
+        return "";
+    }
+}
+
+function loadInventory(items) {
+    inventory = new Map();
+
+    if (!Array.isArray(items)) return;
+
+    items.forEach(item => {
+        if (!item || typeof item !== "object") return;
+
+        const id = item.card_id ?? item.cardId ?? item.id;
+        const variant = item.variant || "Normal";
+        const quantity = Math.max(
+            1,
+            Number(item.quantity ?? item.count ?? 1) || 1
+        );
+
+        if (id === undefined || id === null) return;
+
+        const key = makeCardKey(id, variant);
+        inventory.set(key, (inventory.get(key) || 0) + quantity);
+    });
+}
+
+function buildCatalogue(cards) {
+    catalogue = [];
+
+    cards.forEach(card => {
+        const variants = Array.isArray(card.variants) && card.variants.length
+            ? card.variants
+            : ["Normal"];
+
+        variants.forEach(variant => {
+            const quantity =
+                inventory.get(makeCardKey(card.id, variant)) || 0;
+
+            catalogue.push({
+                id: card.id,
+                name: card.name || "Unnamed Card",
+                rarity: card.rarity || "Common",
+                image: getCardImage(card.image_path),
+                variant,
+                owned: quantity > 0,
+                quantity
+            });
+        });
+    });
+
+    updateStats();
+    filterCards();
+}
+
+function updateStats() {
+    const published = new Set(catalogue.map(card => String(card.id)));
+    const owned = catalogue.filter(card => card.owned).length;
+    const total = catalogue.length;
+
+    document.getElementById("totalCards").textContent = published.size;
+    document.getElementById("uniqueCards").textContent = total;
+
+    document.getElementById("rarityCount").textContent =
+        new Set(catalogue.map(card => card.rarity)).size;
+
+    const percent = total ? Math.round(owned / total * 100) : 0;
+
+    document.getElementById("progressPercent").textContent =
+        percent + "%";
+
+    document.getElementById("progressBar").style.width =
+        percent + "%";
+
+    document.getElementById("progressDescription").textContent =
+        owned + " of " + total +
+        " variants collected. Each variant is tracked separately.";
+}
+
+function filterCards() {
+    const search = document.getElementById("searchInput")
+        .value.trim().toLowerCase();
+
+    const rarity = document.getElementById("rarityFilter").value;
+    const variant = document.getElementById("variantFilter").value;
+
+    const filtered = catalogue.filter(card => {
+        // Only allow searching for cards that have been discovered.
+        const matchesSearch = !search || (
+            card.owned &&
+            (
+                card.name.toLowerCase().includes(search) ||
+                String(card.id).toLowerCase().includes(search)
+            )
+        );
+
+        return matchesSearch &&
+            (rarity === "all" || card.rarity === rarity) &&
+            (variant === "all" || card.variant === variant);
+    });
+
+    displayCards(filtered);
+
+    document.getElementById("resultCount").textContent =
+        "Showing " + filtered.length + " variants · " +
+        filtered.filter(card => card.owned).length + " collected";
+}
+
+function displayCards(cards) {
+    if (!cards.length) {
+        const hasCards = catalogue.length > 0;
+
+        grid.innerHTML = `
+            <div class="collection-empty">
+                <div class="empty-icon">▣</div>
+                <h3>${hasCards ? "No cards found" : "No published cards yet"}</h3>
+                <p>${hasCards
+                    ? "Try changing your search or filters."
+                    : "Once the administrator publishes cards, they will appear here as undiscovered cards."
+                }</p>
+                ${hasCards ? "" : '<a href="shop.html">Visit the shop →</a>'}
+            </div>
+        `;
+        return;
+    }
+
+    grid.innerHTML = cards.map(card => {
+        if (!card.owned) {
+            return `
+                <div class="collection-card undiscovered">
+                    <div class="collection-card-art unknown-art">
+                        <span>?</span>
+                    </div>
+                    <h3>Undiscovered</h3>
+                    <div class="collection-card-id"># ???</div>
+                    <div class="collection-card-details">
+                        <span class="unknown-label">NOT FOUND</span>
+                        <span class="card-variant">???</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        const rarityClass = rarityClasses[card.rarity] || "";
+        const variantClass = variantClasses[card.variant] || "";
+
+        const art = card.image
+            ? `<img src="${escapeHTML(card.image)}"
+                    alt="${escapeHTML(card.name)}"
+                    loading="lazy"
+                    onerror="this.style.display='none'">`
+            : "?";
+
+        return `
+            <div class="collection-card ${variantClass}">
+                <div class="collection-card-art">${art}</div>
+                <h3>${escapeHTML(card.name)}</h3>
+                <div class="collection-card-id">
+                    #${escapeHTML(card.id)}
+                </div>
+                <div class="collection-card-details">
+                    <span class="card-rarity ${rarityClass}">
+                        ${escapeHTML(card.rarity)}
+                    </span>
+                    <span class="card-variant">
+                        ${escapeHTML(card.variant)}
+                        ${card.quantity > 1 ? " ×" + card.quantity : ""}
+                    </span>
+                </div>
+            </div>
+        `;
+    }).join("");
+}
+
+async function loadCollection() {
+    grid.innerHTML = `
+        <div class="collection-empty">
+            <div class="empty-icon">▣</div>
+            <h3>Loading collection...</h3>
+            <p>Connecting to YBC Gacha.</p>
+        </div>
+    `;
+
+    setStatus("Loading published cards...", "info");
+
+    try {
+        // Public catalogue does not require a login.
+        const cardsResult = await api("load_public", {}, false);
+        const cards = Array.isArray(cardsResult.cards)
+            ? cardsResult.cards
+            : [];
+
+        // Load the catalogue even if the player is not logged in.
+        let items = [];
+        const sessionToken = localStorage.getItem(SESSION_KEY);
+
+        if (sessionToken) {
+            try {
+                const inventoryResult = await api("get_inventory");
+                items = Array.isArray(inventoryResult.inventory)
+                    ? inventoryResult.inventory
+                    : [];
+            } catch (inventoryError) {
+                console.warn(
+                    "Could not load player inventory:",
+                    inventoryError
+                );
+
+                setStatus(
+                    "Cards loaded, but your inventory couldn't be loaded. Try logging in again.",
+                    "error"
+                );
+            }
+        } else {
+            setStatus(
+                "Showing the public catalogue. Log in to see your collected cards.",
+                "info"
+            );
+        }
+
+        loadInventory(items);
+        buildCatalogue(cards);
+
+        if (!cards.length) {
+            setStatus(
+                "No published cards were found. Publish cards in the admin panel first.",
+                "info"
+            );
+        } else if (sessionToken && statusBox.classList.contains("info")) {
+            clearStatus();
+        }
+
+    } catch (error) {
+        console.error("Collection loading error:", error);
+
+        grid.innerHTML = `
+            <div class="collection-empty">
+                <div class="empty-icon">!</div>
+                <h3>Couldn't load your collection</h3>
+                <p>${escapeHTML(error.message)}</p>
+                <button onclick="loadCollection()"
+                    style="margin-top:18px;padding:11px 18px;border:0;border-radius:7px;background:#347fff;color:white;font-weight:900;cursor:pointer">
+                    TRY AGAIN
+                </button>
+            </div>
+        `;
+
+        setStatus(
+            "The public card catalogue could not be loaded from the server.",
+            "error"
+        );
+    }
+}
+
+document.getElementById("searchInput")
+    .addEventListener("input", filterCards);
+
+document.getElementById("rarityFilter")
+    .addEventListener("change", filterCards);
+
+document.getElementById("variantFilter")
+    .addEventListener("change", filterCards);
+
+window.addEventListener("pageshow", () => {
+    updatePoints();
+    loadCollection();
+});
+
+updatePoints();
+loadCollection();
+</script>
+
+</body>
+</html>
